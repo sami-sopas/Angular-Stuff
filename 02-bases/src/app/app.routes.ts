@@ -3,7 +3,7 @@ import { CounterComponent } from './pages/counter/counter.component';
 
 export const routes: Routes = [
   {
-    path: '',
+    path: 'counter',
     component: CounterComponent
   }
 ];

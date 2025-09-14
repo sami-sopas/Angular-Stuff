@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { ChangeDetectionStrategy, Component, signal } from "@angular/core";
 
 @Component({
   templateUrl: './counter.component.html',
@@ -7,22 +7,28 @@ import { Component } from "@angular/core";
     padding: 5px;
     margin: 5px 10px;
     width: 75px:
-  }`
+  }`,
+  //changeDetection: ChangeDetectionStrategy.OnPush //(Indica que no usare ZoneJs)
 })
 export class CounterComponent {
   counter = 15;
+  counterSignal = signal(10);
+
+  constructor(){
+    setInterval(() => {
+      //this.counter += 1;
+      this.increaseByOne(1);
+      console.log('Tick');
+    },2000);
+  }
 
   increaseByOne(value: number) {
-    console.log(value)
-    if(value > 0){
-      this.counter += value;
-    }
-    else{
-      this.counter -= Math.abs(value);
-    }
+    this.counter += value;
+    this.counterSignal.update( (currentValue) => currentValue + value);
   }
 
   resetCounter(){
     this.counter = 0;
+    this,this.counterSignal.set(0);
   }
 }
