@@ -6,12 +6,12 @@
   <div class="col-12 col-sm-6">
     <!-- con $event recibimos el evento emitido desde ese componente-->
     <evangelion-character-add
-     (newCharacter)="addCharacter($event)"/>
+     (newCharacter)="evangelionService.addCharacter($event)"/>
   </div>
 
   <div class="col-12 col-sm-6">
     <evangelion-character-list
     listName="Listado de personajes"
-    [characters]="characters()"/>
+    [characters]="evangelionService.characters()"/>
   </div>
 </section>
