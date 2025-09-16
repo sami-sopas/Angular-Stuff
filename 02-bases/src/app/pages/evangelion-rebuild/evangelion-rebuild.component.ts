@@ -1,5 +1,5 @@
-import { NgClass } from '@angular/common';
-import { Component, computed, signal } from '@angular/core';
+import { Component, signal } from '@angular/core';
+import { CharacterListComponent } from '../../components/evangelion/character-list/character-list.component';
 
 interface Character {
   id: number
@@ -8,20 +8,18 @@ interface Character {
 }
 
 @Component({
-  templateUrl: './evangelion.component.html',
-  imports: [],
+  templateUrl: './evangelion-rebuild.component.html',
+  selector: 'app-evangelion-rebuild',
+  imports: [CharacterListComponent],
 })
-export class EvangelionComponent {
+export class EvangelionRebuildComponent {
 
   name = signal('');
   age = signal(0);
 
   characters = signal<Character[]>([
     { id: 1, name: 'Shinji', age: 14 },
-    // { id: 2, name: 'Rei', age: 15 },
-    // { id: 3, name: 'Asuka', age: 16 },
-    // { id: 4, name: 'Kaworu', age: 14 },
-    // { id: 5, name: 'Toji', age: 12 },
+    { id: 2, name: 'Rei', age: 15 },
   ]);
 
   addCharacter():void {

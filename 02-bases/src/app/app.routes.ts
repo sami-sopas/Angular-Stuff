@@ -2,6 +2,7 @@ import { Routes } from '@angular/router';
 import { CounterComponent } from './pages/counter/counter.component';
 import { HeroPageComponent } from './pages/hero/hero-page.component';
 import { EvangelionComponent } from './pages/evangelion/evangelion.component';
+import { EvangelionRebuildComponent } from './pages/evangelion-rebuild/evangelion-rebuild.component';
 
 export const routes: Routes = [
   {
@@ -15,6 +16,10 @@ export const routes: Routes = [
   {
     path: 'evangelion',
     component: EvangelionComponent
+  },
+  {
+    path: 'evangelion-rebuild',
+    component: EvangelionRebuildComponent
   },
   {
     path: '**', //Cualquier path no definido
