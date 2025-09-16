@@ -1,0 +1,27 @@
+<style>
+  nav {
+    display: flex;
+    gap: 1rem;
+    background-color: #1976d2;
+    padding: 1rem;
+  }
+
+  a {
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+  }
+  nav a.active {
+    color: rgb(246, 143, 87);
+  }
+</style>
+
+<nav>
+  <a
+    routerLink="/counter"
+    routerLinkActive="active"
+    [routerLinkActiveOptions]="{exact: true}"
+    >Counter</a> <!-- Esto hara que se active solo si el path es exactamente el mismo, es decir un /counter/1 no se pondria en activo-->
+
+  <a [routerLink]="['/hero']" [routerLinkActive]="['active']">Hero</a> <!-- Ejemplo si fuera asignando una variable -->
+</nav>
