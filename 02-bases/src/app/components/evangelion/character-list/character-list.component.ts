@@ -8,4 +8,6 @@ import type { Character } from '../../../interfaces/character.interface';
 export class CharacterListComponent {
   //Input signal, para pasar valores desde componente padre a componente hijo mediante [characters]="characters()
 characters = input.required<Character[]>();
+listName = input.required<string>();
+
 }

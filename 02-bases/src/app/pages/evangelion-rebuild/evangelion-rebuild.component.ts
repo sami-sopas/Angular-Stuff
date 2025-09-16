@@ -1,5 +1,6 @@
 import { Component, signal } from '@angular/core';
 import { CharacterListComponent } from '../../components/evangelion/character-list/character-list.component';
+import { CharacterAddComponent } from "../../components/evangelion/character-add/character-add.component";
 
 interface Character {
   id: number
@@ -10,7 +11,7 @@ interface Character {
 @Component({
   templateUrl: './evangelion-rebuild.component.html',
   selector: 'app-evangelion-rebuild',
-  imports: [CharacterListComponent],
+  imports: [CharacterListComponent, CharacterAddComponent],
 })
 export class EvangelionRebuildComponent {
 
@@ -22,35 +23,11 @@ export class EvangelionRebuildComponent {
     { id: 2, name: 'Rei', age: 15 },
   ]);
 
-  addCharacter():void {
-    if(!this.name() || this.age() <= 0){
-      return;
-    }
-
-    const newCharacter: Character = {
-      id: this.characters().length + 1,
-      name: this.name(),
-      age: this.age()
-    }
-
-    //this.characters().push(newCharacter); <- Esta opcion funciona, pero no es la mas recomendada
-
+  addCharacter(character: Character):void {
     this.characters.update(
-      (list) => [...list, newCharacter]
-    );
-
-    this.resetFields();
+      list => [...list, character]
+    )
   }
 
-  resetFields(): void {
-    this.name.set('');
-    this.age.set(0);
-  }
-
-  // ageClassess = computed( () => {
-  //   return {
-  //     'text-danger': true
-  //   }
-  // })
 
 }

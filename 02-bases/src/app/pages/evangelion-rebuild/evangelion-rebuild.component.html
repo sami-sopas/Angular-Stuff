@@ -4,33 +4,14 @@
 
 <section class="row">
   <div class="col-12 col-sm-6">
-    <h3>Agregar: {{ name() }}</h3>
-    <input
-      type="text"
-      class="form-control"
-      placeholder="Nombre"
-      [value]="name()"
-      (change)="name.set(txtName.value)"
-      (input)="name.set(txtName.value)"
-      #txtName
-    />
-
-    <h3>Edad: {{ age() }}</h3>
-    <input
-      type="number"
-      class="form-control mt-2"
-      placeholder="Edad"
-      [value]="age()"
-      (input)="age.set(nmbAge.valueAsNumber)"
-      #nmbAge />
-
-    <button (click)="addCharacter()" class="mt-2 btn btn-primary">
-      Agregar
-    </button>
+    <!-- con $event recibimos el evento emitido desde ese componente-->
+    <evangelion-character-add
+     (newCharacter)="addCharacter($event)"/>
   </div>
 
   <div class="col-12 col-sm-6">
-    <evangelion-character-list [characters]="characters()"/>
-
+    <evangelion-character-list
+    listName="Listado de personajes"
+    [characters]="characters()"/>
   </div>
 </section>
