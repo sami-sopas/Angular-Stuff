@@ -1,0 +1,45 @@
+<h1>You are (not) in love</h1>
+
+<hr>
+
+<section class="row">
+  <div class="col-12 col-sm-6">
+    <h3>Agregar:</h3>
+    <input type="text" class="form-control" placeholder="Nombre"/>
+    <input type="number" class="form-control mt-2" placeholder="Edad" />
+
+    <button class="mt-2 btn btn-primary">
+      Agregar
+    </button>
+  </div>
+
+  <div class="col-12 col-sm-6">
+    <h3>Listado principal</h3>
+    <ul>
+      @for (character of characters(); track character.id; let idx = $index ) {
+        @if (character.age >= 14) {
+          <li>
+            <span>
+              {{idx + 1}} - {{ character.name }}
+            </span>
+
+
+          <!--
+              [ngClass]="ageClassess()"-->
+            <strong
+              [class.text-danger]="character.age == 14"
+              [class.text-info]="character.age > 14"
+              >
+              ({{ character.age }})
+            </strong>
+          </li>
+        }
+        @else {
+          <li>
+            <strong>{{idx + 1}} - No cumple</strong>
+          </li>
+        }
+      }
+    </ul>
+  </div>
+</section>

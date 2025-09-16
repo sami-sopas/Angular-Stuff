@@ -20,8 +20,18 @@
   <a
     routerLink="/counter"
     routerLinkActive="active"
-    [routerLinkActiveOptions]="{exact: true}"
-    >Counter</a> <!-- Esto hara que se active solo si el path es exactamente el mismo, es decir un /counter/1 no se pondria en activo-->
+    [routerLinkActiveOptions]="{exact: true}">
+    Counter
+  </a> <!-- Esto hara que se active solo si el path es exactamente el mismo, es decir un /counter/1 no se pondria en activo-->
 
-  <a [routerLink]="['/hero']" [routerLinkActive]="['active']">Hero</a> <!-- Ejemplo si fuera asignando una variable -->
+  <a
+    [routerLink]="['/hero']"
+    [routerLinkActive]="['active']">
+    Hero
+  </a> <!-- Ejemplo si fuera asignando una variable -->
+
+  <a routerLink="evangelion"
+    routerLinkActive="active">
+    Evangelion
+  </a>
 </nav>
