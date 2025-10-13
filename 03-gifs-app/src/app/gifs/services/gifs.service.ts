@@ -1,10 +1,10 @@
 import { HttpClient } from '@angular/common/http';
-import { inject, Injectable, signal } from '@angular/core';
+import { computed, inject, Injectable, signal } from '@angular/core';
 import { environment } from '@environments/environment';
 import type { GiphyResponse } from '../interfaces/giphy.interfaces';
 import { Gif } from '../interfaces/gif.interface';
 import { GifMapper } from '../mapper/gif.mapper';
-import { map } from 'rxjs';
+import { map, Observable, tap } from 'rxjs';
 
 @Injectable({providedIn: 'root'})
 export class GifService {
@@ -13,6 +13,10 @@ export class GifService {
 
   trendingGifs = signal(<Gif[]>[]);
   trendingGifsLoading = signal(true);
+
+  //Para recuperar busquedas anteriores
+  searchHistory = signal<Record<string, Gif[]>>({});
+  searchHistoryKeys = computed(() => Object.keys(this.searchHistory())); //Cada vez que la señal searchHistory cambie, esta computed se va a volver a calcular
 
   constructor() {
     this.loadTrendingGifs();
@@ -29,11 +33,11 @@ export class GifService {
       const gifs = GifMapper.mapGiphyItemsToGifArray(resp.data);
       this.trendingGifsLoading.set(false);
       this.trendingGifs.set(gifs);
-      console.log(gifs);
+      console.log({gifs});
     })
   }
 
-  searchGifs(query: string) {
+  searchGifs(query: string) : Observable<Gif[]> {
     return this.http.get<GiphyResponse>(`${ environment.giphyUrl}/gifs/search`,{
       params: {
         api_key: environment.giphyApiKey,
@@ -45,10 +49,22 @@ export class GifService {
          para modificar la data para hacer un mappeo por ejemplo
       */
       map( ({data}) => data), //({data}) es como decir resp.data
-      map( (items) => GifMapper.mapGiphyItemsToGifArray(items))
+      map( (items) => GifMapper.mapGiphyItemsToGifArray(items)),
 
-      //TODO: Historeial
-    );
+      //Historia;: se guarda lo que ya se busco, y se le agrega lo nuevo que encontro
+      tap( (items) => {
+        this.searchHistory.update ( (currentItems) => ({
+          ...currentItems,
+          [query.toLowerCase()]: items
+        }));
+      }
+    ));
+  }
+
+  //Esta funcion lee la llave(query) y devuelve los gifs que hay en esa llave
+  //si no encuentra nada, devuelve un array vacio
+  getHistoryGifs(query: string) : Gif[] {
+    return this.searchHistory()[query] ?? [];
   }
 
 }
