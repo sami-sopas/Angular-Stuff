@@ -29,8 +29,6 @@ export class GifService {
       groups.push(this.trendingGifs().slice(i, i + 3))
     }
 
-    console.log(groups)
-
     return groups; // [g1,g2,g3]  -> [[g1,g2,g3], [gif,gifgif], ... ]
   })
 
@@ -58,7 +56,6 @@ export class GifService {
       const gifs = GifMapper.mapGiphyItemsToGifArray(resp.data);
       this.trendingGifsLoading.set(false);
       this.trendingGifs.set(gifs);
-      console.log({gifs});
     })
   }
 
