@@ -21,6 +21,19 @@ export class GifService {
   trendingGifs = signal(<Gif[]>[]);
   trendingGifsLoading = signal(true);
 
+  trendingGifGroup = computed<Gif[][]>(() => {
+    const groups = [];
+
+    //Every 3 gifs, create a new group
+    for(let i = 0; i < this.trendingGifs().length; i += 3) {
+      groups.push(this.trendingGifs().slice(i, i + 3))
+    }
+
+    console.log(groups)
+
+    return groups; // [g1,g2,g3]  -> [[g1,g2,g3], [gif,gifgif], ... ]
+  })
+
   //Para recuperar busquedas anteriores
   searchHistory = signal<Record<string, Gif[]>>(loadFromLocalStorage());
   searchHistoryKeys = computed(() => Object.keys(this.searchHistory())); //Cada vez que la señal searchHistory cambie, esta computed se va a volver a calcular
@@ -57,13 +70,13 @@ export class GifService {
         q: query
       }
     }).pipe(
-      /* Cuando se emita el observable, el map barrer cada elemento
+      /* Cuando se emita el observable, el map barre cada elemento
          para modificar la data para hacer un mappeo por ejemplo
       */
       map( ({data}) => data), //({data}) es como decir resp.data
       map( (items) => GifMapper.mapGiphyItemsToGifArray(items)),
 
-      //Historia;: se guarda lo que ya se busco, y se le agrega lo nuevo que encontro
+      //Historial: se guarda lo que ya se busco, y se le agrega lo nuevo que encontro
       tap( (items) => {
         this.searchHistory.update ( (currentItems) => ({
           ...currentItems,
