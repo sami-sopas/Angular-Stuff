@@ -9,7 +9,7 @@ export const routes: Routes = [
     component: HomePageComponent,
   },
   {
-    path: 'country',
+    path: 'country', //Todo lo que venga despues de /country, lo maneja el country.routes
     loadChildren: () => import('./country/country.routes')
   },
   {
