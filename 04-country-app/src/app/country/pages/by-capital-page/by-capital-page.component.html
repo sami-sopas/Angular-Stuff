@@ -1,6 +1,7 @@
 <!-- country-search-input -->
-<country-search-input [placeholderText]="'Search by capital'">
-
+<country-search-input
+  [placeholderText]="'Search by capital'"
+  (searchValue)="onSearch($event)">
 </country-search-input>
 
 <!-- country-list -->,
