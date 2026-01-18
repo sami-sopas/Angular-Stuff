@@ -30,7 +30,24 @@ export class CountryService {
             () => new Error('No se pudo obtener paises con esa query: ' + query));
         })
       );
-
   }
+
+  searchByCountry( query: string) : Observable<Country[]> {
+    query = query.toLowerCase();
+
+    return this.http.get<RESTCountry[]>(`${API_URL}/name/${ query }`)
+      .pipe(
+        map( (restCountries) =>
+          CountryMapper.mapRestCountriesToCountryArray(restCountries)
+        ),
+        catchError( error => {
+          console.log('Error en el servicio', error);
+
+          return throwError(
+            () => new Error('No se pudo obtener paises con esa query: ' + query));
+        })
+      );
+  }
+
 
 }
