@@ -2,9 +2,8 @@ import { Component, inject, resource, signal } from '@angular/core';
 import { SearchInputComponent } from '../../components/search-input/search-input.component';
 import { CountryListComponent } from "../../components/list/country-list.component";
 import { CountryService } from '../../services/country.service';
-import { RESTCountry } from '../../interfaces/rest-countries.interface';
-import { Country } from '../../interfaces/country.interface';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, Observable, of } from 'rxjs';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -17,20 +16,32 @@ export class ByCapitalPageComponent {
 
   query = signal('');
 
-  countryResource = resource({
+  //Codigo que usa rxResource (el que usa observables) ---------------------------
+  countryResource = rxResource({
     request: () => ({ query: this.query()}),
 
-    loader: async({ request }) => { //este request, es basicamente, el objeto que tenemos arriba en request
-      if( !request.query ) return [];
+    loader:({ request }) => {
+      if ( !request.query) return of([]); //of, crea un Observable a partir de un valor
 
-      return await firstValueFrom(
-        this.countryService.searchByCapital( request.query ) //FirstValueFrom, convierte un Observable en una Promesa
-      );
-
+      return this.countryService.searchByCapital( request.query ) //FirstValueFrom, convierte un Observable en una Promesa
     }
   })
 
-    //Codigo que se remplazo al usar resource:
+  //Codigo que usa reource (el que usa promesas) ---------------------------
+  // countryResource = resource({
+  //   request: () => ({ query: this.query()}),
+
+  //   loader: async({ request }) => { //este request, es basicamente, el objeto que tenemos arriba en request
+  //     if( !request.query ) return [];
+
+  //     return await firstValueFrom(
+  //       this.countryService.searchByCapital( request.query ) //FirstValueFrom, convierte un Observable en una Promesa
+  //     );
+
+  //   }
+  // })
+
+  //Codigo que se remplazo al usar resource---------------------------
   // isLoading = signal(false);
   // isError = signal<string | null>(null);
   // countries = signal<Country[]>([])

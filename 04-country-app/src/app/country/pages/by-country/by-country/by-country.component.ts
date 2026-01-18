@@ -1,8 +1,9 @@
 import { Component, inject, resource, signal } from '@angular/core';
 import { CountryListComponent } from '../../../components/list/country-list.component';
 import { SearchInputComponent } from '../../../components/search-input/search-input.component';
-import { firstValueFrom } from 'rxjs';
+import { firstValueFrom, of } from 'rxjs';
 import { CountryService } from '../../../services/country.service';
+import { rxResource } from '@angular/core/rxjs-interop';
 
 @Component({
   selector: 'app-by-country',
@@ -15,16 +16,14 @@ export class ByCountryComponent {
 
   query = signal('');
 
-  countryResource = resource({
+  countryResource = rxResource({
     request: () => ({ query: this.query()}),
 
-    loader: async({ request }) => { //este request, es basicamente, el objeto que tenemos arriba en request
-      if( !request.query ) return [];
+    loader:({ request }) => {
+      if ( !request.query) return of([]); //of, crea un Observable a partir de un valor
 
-      return await firstValueFrom(
-        this.countryService.searchByCountry( request.query ) //FirstValueFrom, convierte un Observable en una Promesa
-      );
-
+      return this.countryService.searchByCountry( request.query ) //FirstValueFrom, convierte un Observable en una Promesa
     }
   })
+
  }
