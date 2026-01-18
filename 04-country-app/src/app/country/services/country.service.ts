@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Country } from '../interfaces/country.interface';
 import { CountryMapper } from '../mappers/country.mapper';
 import { RESTCountry } from '../interfaces/rest-countries.interface';
-import { map, Observable, catchError, throwError, delay } from 'rxjs';
+import { map, Observable, catchError, throwError, delay, count } from 'rxjs';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -50,5 +50,21 @@ export class CountryService {
       );
   }
 
+  searchCountryByAlphaCode( code: string ) : Observable<Country | undefined> {
+
+    return this.http.get<RESTCountry[]>(`${API_URL}/alpha/${ code }`)
+      .pipe(
+        map( (restCountries) =>
+          CountryMapper.mapRestCountriesToCountryArray(restCountries)
+        ),
+        map( countries => countries.at(0) ),
+        catchError( error => {
+          console.log('Error en el servicio', error);
+
+          return throwError(
+            () => new Error('No se pudo obtener paises con esa alpha code: ' + code));
+        })
+      );
+  }
 
 }
