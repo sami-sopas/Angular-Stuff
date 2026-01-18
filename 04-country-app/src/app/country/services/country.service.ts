@@ -3,7 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { Country } from '../interfaces/country.interface';
 import { CountryMapper } from '../mappers/country.mapper';
 import { RESTCountry } from '../interfaces/rest-countries.interface';
-import { map, Observable } from 'rxjs';
+import { map, Observable, catchError, throwError } from 'rxjs';
 
 const API_URL = 'https://restcountries.com/v3.1';
 
@@ -22,7 +22,13 @@ export class CountryService {
       .pipe(
         map( (restCountries) =>
           CountryMapper.mapRestCountriesToCountryArray(restCountries)
-        )
+        ),
+        catchError( error => {
+          console.log('Error en el servicio', error);
+
+          return throwError(
+            () => new Error('No se pudo obtener paises con esa query: ' + query));
+        })
       );
 
   }

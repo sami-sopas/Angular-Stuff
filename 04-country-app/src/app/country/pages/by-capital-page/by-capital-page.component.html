@@ -4,5 +4,10 @@
   (searchValue)="onSearch($event)">
 </country-search-input>
 
-<!-- country-list -->,
- <country-list [countries]="countries()" />
+<!-- country-list -->
+ @if (isError()) {
+  <h3>{{ isError()}}</h3>
+ }
+ @else {
+   <country-list [countries]="countries()" />
+ }
