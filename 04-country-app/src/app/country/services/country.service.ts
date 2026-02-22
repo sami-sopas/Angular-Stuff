@@ -68,3 +68,7 @@ export class CountryService {
   }
 
 }
+function of(arg0: never[]): Observable<Country[]> {
+  throw new Error('Function not implemented.');
+}
+
