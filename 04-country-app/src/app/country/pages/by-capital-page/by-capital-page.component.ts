@@ -4,7 +4,8 @@ import { CountryListComponent } from "../../components/list/country-list.compone
 import { CountryService } from '../../services/country.service';
 import { firstValueFrom, Observable, of } from 'rxjs';
 import { rxResource } from '@angular/core/rxjs-interop';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-by-capital-page',
@@ -14,9 +15,9 @@ import { ActivatedRoute } from '@angular/router';
 export class ByCapitalPageComponent {
 
   countryService = inject(CountryService);
-
-
   activeRoute = inject(ActivatedRoute);
+  router = inject(Router);
+
 
   //Ge
   queryParam = this.activeRoute.snapshot.queryParamMap.get('query') ?? '';
@@ -27,8 +28,16 @@ export class ByCapitalPageComponent {
     request: () => ({ query: this.query()}),
 
     loader:({ request }) => {
-      console.log({query: request.query})
       if ( !request.query) return of([]); //of, crea un Observable a partir de un valor
+
+
+      //Mantenerse en la ruta actual y agregar los parametros
+      //Ex: /country/by/capital?query=san%20salvador
+      this.router.navigate(['/country/by-capital'], {
+        queryParams: {
+          query: request.query,
+        }
+      })
 
       return this.countryService.searchByCapital( request.query ) //FirstValueFrom, convierte un Observable en una Promesa
     }
