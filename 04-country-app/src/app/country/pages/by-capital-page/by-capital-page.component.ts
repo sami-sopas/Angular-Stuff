@@ -1,9 +1,10 @@
-import { Component, inject, resource, signal } from '@angular/core';
+import { Component, inject, linkedSignal, resource, signal } from '@angular/core';
 import { SearchInputComponent } from '../../components/search-input/search-input.component';
 import { CountryListComponent } from "../../components/list/country-list.component";
 import { CountryService } from '../../services/country.service';
 import { firstValueFrom, Observable, of } from 'rxjs';
 import { rxResource } from '@angular/core/rxjs-interop';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-by-capital-page',
@@ -14,13 +15,19 @@ export class ByCapitalPageComponent {
 
   countryService = inject(CountryService);
 
-  query = signal('');
 
+  activeRoute = inject(ActivatedRoute);
+
+  //Ge
+  queryParam = this.activeRoute.snapshot.queryParamMap.get('query') ?? '';
+
+  query = linkedSignal(() => this.queryParam);
   //Codigo que usa rxResource (el que usa observables) ---------------------------
   countryResource = rxResource({
     request: () => ({ query: this.query()}),
 
     loader:({ request }) => {
+      console.log({query: request.query})
       if ( !request.query) return of([]); //of, crea un Observable a partir de un valor
 
       return this.countryService.searchByCapital( request.query ) //FirstValueFrom, convierte un Observable en una Promesa
